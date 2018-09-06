@@ -109,7 +109,7 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
 
     // Add components
     ins_note->SetComponent(new InstrumentComponent{});
-    ins_note->SetComponent(new NoteInfoComponent{-1, 0, note
+    ins_note->SetComponent(new NoteInfoComponent{-1, 9, note
             , Config::GetInstance().GetMidiOutVelocity()});
     ins_note->SetComponent(new InstrumentInputHandlerComponent{key, ctrl
             , shift});
