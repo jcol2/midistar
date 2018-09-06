@@ -67,17 +67,19 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
         , int chan
         , int note
         , int vel
-        , double duration) {
+        , double) {
     // Create underlying shape
-    double x = GetXPosition(note);
-    double height = duration * 1000 * GetNoteSpeed();
+    double padding = note_width_ * 0.2;
+    double x = GetXPosition(note) + padding / 2;
+    double height = 100 * GetNoteSpeed();
     sf::RectangleShape* rect = new sf::RectangleShape{{static_cast<float>(
-            note_width_), static_cast<float>(height)}};
+            note_width_ - padding), static_cast<float>(height)}};
 
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
     // entire height over its duration).
-    auto song_note = new GameObject{rect, x, -height, note_width_, height};
+    auto song_note = new GameObject{rect, x, -height, note_width_ - padding
+        , height};
 
     // Add components
     song_note->SetComponent(new SongNoteComponent{});
@@ -92,15 +94,18 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
 
 GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     // Create underlying shape
-    double x = GetXPosition(note);
+    double padding = note_width_ * 0.2;
+    double x = GetXPosition(note) + padding / 2;
     double y = Config::GetInstance().GetScreenHeight() - INSTRUMENT_HEIGHT -
         (Config::GetInstance().GetScreenHeight() * INSTRUMENT_HOVER_PERCENTAGE);
-    sf::RectangleShape* rect = new sf::RectangleShape{{static_cast<float>(
-            note_width_), INSTRUMENT_HEIGHT}};;
+    sf::RectangleShape* rect = new sf::RectangleShape{{
+        static_cast<float>(note_width_ - padding)
+        , INSTRUMENT_HEIGHT}};;
     rect->setFillColor(sf::Color::Red);
 
     // Create GameObject
-    auto ins_note = new GameObject{rect, x, y, note_width_, INSTRUMENT_HEIGHT};
+    auto ins_note = new GameObject{rect, x, y, note_width_- padding
+        , INSTRUMENT_HEIGHT};
 
     // Get key binding
     sf::Keyboard::Key key;
