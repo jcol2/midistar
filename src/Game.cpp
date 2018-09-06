@@ -23,6 +23,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "midistar/DefaultGameObjectFactory.h"
+#include "midistar/DrumGameObjectFactory.h"
 #include "midistar/PianoGameObjectFactory.h"
 #include "midistar/Config.h"
 #include "midistar/NoteInfoComponent.h"
@@ -93,10 +94,12 @@ bool Game::Init() {
         Config::GetInstance().GetFallSpeedMultiplier();
 
     auto mode = Config::GetInstance().GetGameMode();
-    if (mode == "piano") {
-            object_factory_ = new PianoGameObjectFactory(note_speed);
+    if (mode == "drum") {
+        object_factory_ = new DrumGameObjectFactory(note_speed);
+    } else if (mode == "piano") {
+        object_factory_ = new PianoGameObjectFactory(note_speed);
     } else {
-            object_factory_ = new DefaultGameObjectFactory(note_speed);
+        object_factory_ = new DefaultGameObjectFactory(note_speed);
     }
     if (!object_factory_->Init()) {
         return false;
