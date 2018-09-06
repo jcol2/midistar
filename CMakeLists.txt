@@ -39,7 +39,9 @@ add_executable(midistar
     src/Component.cpp
     src/Config.cpp
     src/DefaultGameObjectFactory.cpp
-    src/DeleteOffscreenComponent.cpp    
+    src/DeleteOffscreenComponent.cpp
+    src/DeleteOffscreenComponent.cpp
+    src/DrumGameObjectFactory.cpp
     src/Game.cpp
     src/GameObject.cpp
     src/GameObjectFactory.cpp

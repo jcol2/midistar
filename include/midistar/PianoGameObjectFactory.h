@@ -45,7 +45,6 @@ class PianoGameObjectFactory : public GameObjectFactory {
      */
     virtual GameObject* CreateNotePlayEffect(GameObject* note);
 
-
    /**
      * \copydoc GameObjectFactory::CreateInstrument()
      */
