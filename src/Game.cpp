@@ -95,7 +95,8 @@ bool Game::Init() {
 
     auto mode = Config::GetInstance().GetGameMode();
     if (mode == "drum") {
-        object_factory_ = new DrumGameObjectFactory(note_speed);
+        auto unique_notes = midi_file_in_.GetUniqueMidiNotes();
+        object_factory_ = new DrumGameObjectFactory(note_speed, {unique_notes});
     } else if (mode == "piano") {
         object_factory_ = new PianoGameObjectFactory(note_speed);
     } else {
