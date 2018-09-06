@@ -39,10 +39,13 @@ namespace midistar {
 
 const sf::Color DrumGameObjectFactory::BACKGROUND_COLOUR{0, 0, 0};
 
-DrumGameObjectFactory::DrumGameObjectFactory(double note_speed)
+DrumGameObjectFactory::DrumGameObjectFactory(
+    double note_speed
+    , const std::set<int>& song_notes)
         : GameObjectFactory{note_speed, BACKGROUND_COLOUR}
         , note_width_{Config::GetInstance().GetScreenWidth() /
-            static_cast<double>(NUM_MIDI_KEYS)} {
+            static_cast<double>(NUM_MIDI_KEYS)}
+        , song_notes_{song_notes} {
 }
 
 GameObject* DrumGameObjectFactory::CreateNotePlayEffect(GameObject*) {
@@ -53,7 +56,7 @@ GameObject* DrumGameObjectFactory::CreateNotePlayEffect(GameObject*) {
 
 std::vector<GameObject*> DrumGameObjectFactory::CreateInstrument() {
     std::vector<GameObject*> result;
-    for (int key = 0; key < NUM_MIDI_KEYS; ++key) {
+    for (int key : song_notes_) {
         result.push_back(CreateInstrumentNote(key));
     }
     return result;

@@ -19,6 +19,7 @@
 #ifndef MIDISTAR_DRUMGAMEOBJECTFACTORY_H_
 #define MIDISTAR_DRUMGAMEOBJECTFACTORY_H_
 
+#include <set>
 #include <vector>
 #include <SFML/Window.hpp>
 
@@ -35,8 +36,13 @@ class DrumGameObjectFactory : public GameObjectFactory {
  public:
     /**
      * Constructor
+     *
+     * \param note_speed The falling speed of notes.
+     * \param song_notes Unique MIDI notes in the song.
      */
-    explicit DrumGameObjectFactory(double note_speed);
+    explicit DrumGameObjectFactory(
+            double note_speed
+            , const std::set<int>& song_notes);
 
     /**
      * \copydoc GameObjectFactory::CreateNotePlayEffect()
@@ -76,6 +82,7 @@ class DrumGameObjectFactory : public GameObjectFactory {
             bool* ctrl, bool* shift);  //!< Gets instrument key binding
 
     double note_width_;  //!< Holds the width of song notes
+    std::set<int> song_notes_;  //!< Unique MIDI notes in the song
 };
 
 }  // End namespace midistar
