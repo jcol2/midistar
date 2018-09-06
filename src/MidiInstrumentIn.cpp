@@ -16,41 +16,22 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MIDISTAR_MIDIIN_H_
-#define MIDISTAR_MIDIIN_H_
+#include "midistar/MidiInstrumentIn.h"
 
-#include <queue>
-
-#include "midistar/MidiMessage.h"
+#include "midistar/Config.h"
 
 namespace midistar {
 
-/**
- * The MidiIn class provides an interface for MIDI stream readers.
- */
-class MidiIn {
- public:
-    /**
-     * Gets the next MIDI message.
-     *
-     * \param[out] message Stores the MIDI message.
-     *
-     * \return True for success. False if an event is not available.
-     */
-    virtual bool GetMessage(MidiMessage* message);
+bool MidiInstrumentIn::GetMessage(MidiMessage* message) {
+    if (!MidiPortIn::GetMessage(message)) {
+        return false;
+    }
 
- protected:
-    /**
-     * Adds a MIDI message to the message queue.
-     *
-     * \param message The message to add.
-     */
-    void AddMessage(MidiMessage message);
-
- private:
-    std::queue<MidiMessage> buffer_;  //!< MIDI message buffer
-};
+    if (message->IsNote()) {
+        message->SetKey(Config::GetInstance().GetInstrumentMidiNoteRemapping(
+                message->GetKey()));
+    }
+    return true;
+}
 
 }  // End namespace midistar
-
-#endif  // MIDISTAR_MIDIIN_H_
