@@ -20,6 +20,7 @@
 #define MIDISTAR_CONFIG_H_
 
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include <CLI/CLI.hpp>
 #include <SFML/Graphics.hpp>
@@ -67,6 +68,16 @@ class Config {
      * \return Game mode.
      */
     const std::string GetGameMode();
+
+    /**
+     * Gets the MIDI note re-mapping (if it exists) of a note played on an
+     * instrument.
+     *
+     * \param note The actual MIDI note played on the instrument.
+     * \return The MIDI note it is mapped to in midistar. If there is no re-
+     * mapping, returns the original note.
+     */
+    int GetInstrumentMidiNoteRemapping(int note);
 
     /**
      * Gets the maximum number of frames per second (FPS) for the SFML window.
@@ -183,6 +194,10 @@ class Config {
     double fall_speed_multiplier_;  //!< Affects fall speed of notes
     bool full_screen_;  //!< Full-screen setting
     std::string game_mode_;  //!< Game mode name
+    std::unordered_map<int, int> instrument_midi_remapping_;  //!< MIDI
+                                    //!< remapping derived from commandline arg
+    std::vector<int> instrument_midi_remapping_notes_;  //!< MIDI remapping
+                                                           //!< commandline arg
     int keyboard_first_note_;  //!< The first MIDI note to map on the keyboard
     int max_frames_per_second_;  //!< Max FPS
     std::vector<int> midi_file_channels_;  //!< MIDI file channels to play

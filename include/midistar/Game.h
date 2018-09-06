@@ -28,7 +28,7 @@
 #include "midistar/MidiFileIn.h"
 #include "midistar/MidiMessage.h"
 #include "midistar/MidiOut.h"
-#include "midistar/MidiPortIn.h"
+#include "midistar/MidiInstrumentIn.h"
 
 namespace midistar {
 
@@ -128,7 +128,7 @@ class Game {
     MidiFileIn midi_file_in_;  //!< MIDI file in instance
     std::vector<MidiMessage> midi_in_buf_;  //!< MIDI input port notes buffer
     MidiOut midi_out_;  //!< MIDI port out instance
-    MidiPortIn midi_port_in_;  //!< MIDI input port instance
+    MidiInstrumentIn midi_instrument_in_;  //!< MIDI instrument input
     std::queue<GameObject*> new_objects_;  //!< New GameObjects buffer
     std::vector<GameObject*> objects_;  //!< GameObjects buffer
     std::vector<sf::Event> sf_events_;  //!< SFML events buffer

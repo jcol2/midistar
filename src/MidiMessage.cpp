@@ -107,4 +107,8 @@ bool MidiMessage::IsNoteOn() const {
     return command == NOTE_ON_COMMAND && data_[2] != 0;
 }
 
+void MidiMessage::SetKey(int key) {
+    data_[1] = static_cast<unsigned char>(key);
+}
+
 }  // End namespace midistar

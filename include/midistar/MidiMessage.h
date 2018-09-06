@@ -150,6 +150,13 @@ class MidiMessage {
      */
     bool IsNoteOn() const;
 
+    /**
+     * Sets the MIDI key of the message.
+     *
+     * \param note The MIDI key.
+     */
+    void SetKey(int key);
+
  private:
     static const unsigned char CHANNEL_MASK = 0x0f;  //!< Mask for channel
     static const unsigned char COMMAND_MASK = 0xf0;  //!< Mask for command
