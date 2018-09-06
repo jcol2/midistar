@@ -20,8 +20,8 @@
 #define MIDISTAR_MIDIFILEIN_H_
 
 #include <midifile/MidiFile.h>
-#include <set>
 #include <string>
+#include <vector>
 #include <SFML/System.hpp>
 
 #include "midistar/MidiIn.h"
@@ -51,11 +51,11 @@ class MidiFileIn : public MidiIn {
     int GetTicksPerQuarterNote() const;
 
     /**
-     * Returns a set of unique MIDI notes in the song.
+     * Returns the unique MIDI notes in the song.
      *
      * \return Unique MIDI notes.
      */
-    std::set<int> GetUniqueMidiNotes() const;
+    std::vector<int> GetUniqueMidiNotes() const;
 
     /**
      * Initialises the class.

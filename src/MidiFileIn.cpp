@@ -38,14 +38,14 @@ int MidiFileIn::GetTicksPerQuarterNote() const {
     return file_.getTicksPerQuarterNote();
 }
 
-std::set<int> MidiFileIn::GetUniqueMidiNotes() const {
+std::vector<int> MidiFileIn::GetUniqueMidiNotes() const {
     std::set<int> notes;
     for (int i=0; i < file_[0].size(); ++i) {
         if (file_[0][i].isNote()) {
             notes.insert(file_[0][i][1]);
         }
     }
-    return notes;
+    return std::vector<int>{notes.begin(), notes.end()};
 }
 
 bool MidiFileIn::Init(const std::string& file_name) {

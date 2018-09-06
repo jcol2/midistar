@@ -41,10 +41,10 @@ const sf::Color DrumGameObjectFactory::BACKGROUND_COLOUR{0, 0, 0};
 
 DrumGameObjectFactory::DrumGameObjectFactory(
     double note_speed
-    , const std::set<int>& song_notes)
+    , const std::vector<int>& song_notes)
         : GameObjectFactory{note_speed, BACKGROUND_COLOUR}
         , note_width_{Config::GetInstance().GetScreenWidth() /
-            static_cast<double>(NUM_MIDI_KEYS)}
+            static_cast<double>(song_notes.size())}
         , song_notes_{song_notes} {
 }
 
@@ -69,7 +69,7 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
         , int vel
         , double duration) {
     // Create underlying shape
-    double x = note * note_width_;
+    double x = GetXPosition(note);
     double height = duration * 1000 * GetNoteSpeed();
     sf::RectangleShape* rect = new sf::RectangleShape{{static_cast<float>(
             note_width_), static_cast<float>(height)}};
@@ -92,7 +92,7 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
 
 GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     // Create underlying shape
-    double x = note * note_width_;
+    double x = GetXPosition(note);
     double y = Config::GetInstance().GetScreenHeight() - INSTRUMENT_HEIGHT -
         (Config::GetInstance().GetScreenHeight() * INSTRUMENT_HOVER_PERCENTAGE);
     sf::RectangleShape* rect = new sf::RectangleShape{{static_cast<float>(
@@ -124,22 +124,23 @@ void DrumGameObjectFactory::GetInstrumentKeyBinding(
         , bool* ctrl
         , bool* shift) {
     const std::vector<sf::Keyboard::Key>& keys = Utility::GetQwertyKeys();
-    int num_keys = keys.size();
-
-    // We don't have enough unique keys to assign each instrument one key, so
-    // we break the key bindings up in to three equal sections. The first
-    // section bindings use a key plus the ctrl modifier. The second section
-    // bindings use just a key. The third section bindings use a key plus the
-    // shift modifier. This way we can cover every single MIDI note with the
-    // QWERTY keys (alphanumeric and a few punctuation keys).
-    assert(num_keys * 3 >= NUM_MIDI_KEYS);
+    assert(keys.size() >= song_notes_.size());
 
     // Get the key
-    *key = keys[midi_key % num_keys];
-    // Determine if we are in the first section
-    *ctrl = midi_key < num_keys;
-    // Determine if we are in the third section
-    *shift = midi_key >= num_keys * 2;
+    int idx = GetNoteUniqueIndex(midi_key);
+    *key = keys[idx];
+    *ctrl = false;
+    *shift = false;
+}
+
+int DrumGameObjectFactory::GetNoteUniqueIndex(int note) {
+    auto pos = std::find(song_notes_.begin(), song_notes_.end(), note);
+    assert(pos != song_notes_.end());
+    return pos - song_notes_.begin();
+}
+
+double DrumGameObjectFactory::GetXPosition(int note) {
+    return GetNoteUniqueIndex(note) * note_width_;
 }
 
 bool DrumGameObjectFactory::Init() {
