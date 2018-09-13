@@ -75,14 +75,14 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     // Create underlying shape
     double x = GetXPosition(note);
     double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    float w = static_cast<float>(note_width_ - padding_px);
+    float w = static_cast<float>(note_width_ - padding_px * 2);
     float h = 100 * GetNoteSpeed();
     sf::RectangleShape* rect = new sf::RectangleShape{{w, h}};
 
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
     // entire height over its duration).
-    auto song_note = new GameObject{rect, x + padding_px / 2, -h, w, h};
+    auto song_note = new GameObject{rect, x + padding_px, -h, w, h};
 
     // Add components
     song_note->SetComponent(new SongNoteComponent{});
@@ -102,13 +102,13 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
         (Config::GetInstance().GetScreenHeight() * INSTRUMENT_HOVER_PERCENTAGE);
 
     double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    float w = static_cast<float>(note_width_ - padding_px);
+    float w = static_cast<float>(note_width_ - padding_px * 2);
     float h = DRUM_HEIGHT;
     sf::RectangleShape* rect = new sf::RectangleShape{{w, h}};
     rect->setFillColor(sf::Color::Red);
 
     // Create GameObject
-    auto ins_note = new GameObject{rect, x + padding_px / 2, y, w, h};
+    auto ins_note = new GameObject{rect, x + padding_px, y, w, h};
 
     // Get key binding
     sf::Keyboard::Key key;
