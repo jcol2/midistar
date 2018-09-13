@@ -45,6 +45,7 @@ const sf::Color DrumGameObjectFactory::DRUM_COLOURS[NUM_DRUM_COLOURS] {
     , sf::Color::Magenta, sf::Color::Cyan
 };
 
+const sf::Color DrumGameObjectFactory::OUTLINE_COLOUR{0, 0, 0};
 
 DrumGameObjectFactory::DrumGameObjectFactory(
     double note_speed
@@ -82,10 +83,13 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     double x = GetXPosition(note);
     double padding_px = note_width_ * DRUM_PADDING_PERCENT;
     float w = static_cast<float>(note_width_ - padding_px * 2);
-    float h = 100 * GetNoteSpeed();
+    float h = std::min(GetNoteSpeed() * NOTE_HEIGHT_MULTIPLIER,
+            static_cast<double>(MAX_NOTE_HEIGHT));
     sf::RectangleShape* rect = new sf::RectangleShape{{w, h}};
     rect->setFillColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
             NUM_DRUM_COLOURS]);
+    rect->setOutlineColor(OUTLINE_COLOUR);
+    rect->setOutlineThickness(OUTLINE_THICKNESS);
 
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
@@ -115,6 +119,8 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     sf::RectangleShape* rect = new sf::RectangleShape{{w, h}};
     rect->setFillColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
             NUM_DRUM_COLOURS]);
+    rect->setOutlineColor(OUTLINE_COLOUR);
+    rect->setOutlineThickness(OUTLINE_THICKNESS);
 
     // Create GameObject
     auto ins_note = new GameObject{rect, x + padding_px, y, w, h};
