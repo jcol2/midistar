@@ -71,8 +71,8 @@ class DrumGameObjectFactory : public GameObjectFactory {
  private:
     static const sf::Color BACKGROUND_COLOUR;  //!< Background colour
     static const int DRUM_HEIGHT = 50;     //!< Drum height
-    static constexpr float DRUM_MARGIN = 0.2;  //!< Margin percentage
-    static const int MAX_DRUM_WIDTH = 100;  //!< Max drum width
+    static constexpr float DRUM_PADDING_PERCENT = 0.2;  //!< Padding percentage
+    static const int MAX_DRUM_WIDTH = 200;  //!< Max drum width
     static const int NUM_MIDI_KEYS = 128;  //!< Maximum MIDI key
     static constexpr float INSTRUMENT_HOVER_PERCENTAGE = 0.1f;  //!< The
              //!< percentage of the screen height that instruments will hover
