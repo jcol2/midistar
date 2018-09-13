@@ -18,6 +18,7 @@
 
 #include "midistar/DrumGameObjectFactory.h"
 
+#include <algorithm>
 #include <cassert>
 
 #include "midistar/CollidableComponent.h"
@@ -44,8 +45,12 @@ DrumGameObjectFactory::DrumGameObjectFactory(
     , const std::vector<int>& song_notes)
         : GameObjectFactory{note_speed, BACKGROUND_COLOUR}
         , note_width_{Config::GetInstance().GetScreenWidth() /
-            static_cast<double>(song_notes.size())}
+            (song_notes.size() + (song_notes.size() * DRUM_MARGIN * 2))}
         , song_notes_{song_notes} {
+    note_width_ = std::min(note_width_, static_cast<double>(MAX_DRUM_WIDTH));
+    centred_ = Config::GetInstance().GetScreenWidth() / 2  -
+        ((song_notes.size() * (note_width_ + note_width_ * DRUM_MARGIN * 2)
+          / 2));
 }
 
 GameObject* DrumGameObjectFactory::CreateNotePlayEffect(GameObject*) {
@@ -69,17 +74,15 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
         , int vel
         , double) {
     // Create underlying shape
-    double padding = note_width_ * 0.2;
-    double x = GetXPosition(note) + padding / 2;
+    double x = GetXPosition(note);
     double height = 100 * GetNoteSpeed();
     sf::RectangleShape* rect = new sf::RectangleShape{{static_cast<float>(
-            note_width_ - padding), static_cast<float>(height)}};
+            note_width_), static_cast<float>(height)}};
 
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
     // entire height over its duration).
-    auto song_note = new GameObject{rect, x, -height, note_width_ - padding
-        , height};
+    auto song_note = new GameObject{rect, x, -height, note_width_, height};
 
     // Add components
     song_note->SetComponent(new SongNoteComponent{});
@@ -94,18 +97,17 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
 
 GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     // Create underlying shape
-    double padding = note_width_ * 0.2;
-    double x = GetXPosition(note) + padding / 2;
-    double y = Config::GetInstance().GetScreenHeight() - INSTRUMENT_HEIGHT -
+    double x = GetXPosition(note);
+    double y = Config::GetInstance().GetScreenHeight() - DRUM_HEIGHT -
         (Config::GetInstance().GetScreenHeight() * INSTRUMENT_HOVER_PERCENTAGE);
     sf::RectangleShape* rect = new sf::RectangleShape{{
-        static_cast<float>(note_width_ - padding)
-        , INSTRUMENT_HEIGHT}};;
+        static_cast<float>(note_width_)
+        , DRUM_HEIGHT}};;
     rect->setFillColor(sf::Color::Red);
 
     // Create GameObject
-    auto ins_note = new GameObject{rect, x, y, note_width_- padding
-        , INSTRUMENT_HEIGHT};
+    auto ins_note = new GameObject{rect, x, y, note_width_
+        , DRUM_HEIGHT};
 
     // Get key binding
     sf::Keyboard::Key key;
@@ -145,7 +147,9 @@ int DrumGameObjectFactory::GetNoteUniqueIndex(int note) {
 }
 
 double DrumGameObjectFactory::GetXPosition(int note) {
-    return GetNoteUniqueIndex(note) * note_width_;
+    double margin_px = note_width_ * DRUM_MARGIN;
+    return centred_ + margin_px + GetNoteUniqueIndex(note) * (note_width_ +
+            margin_px * 2);
 }
 
 bool DrumGameObjectFactory::Init() {
