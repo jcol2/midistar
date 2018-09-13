@@ -73,9 +73,13 @@ class DrumGameObjectFactory : public GameObjectFactory {
     static const int DRUM_HEIGHT = 50;     //!< Drum height
     static constexpr float DRUM_PADDING_PERCENT = 0.1;  //!< Padding percentage
     static const int MAX_DRUM_WIDTH = 200;  //!< Max drum width
+    static const int NUM_DRUM_COLOURS = 6;
     static const int NUM_MIDI_KEYS = 128;  //!< Maximum MIDI key
     static constexpr float INSTRUMENT_HOVER_PERCENTAGE = 0.1f;  //!< The
              //!< percentage of the screen height that instruments will hover
+
+    static const sf::Color DRUM_COLOURS[NUM_DRUM_COLOURS];  //!< Holds drum
+                                                                  //!< colours
 
     GameObject* CreateInstrumentNote(int midi_key);  //!< Creates a note for
                                  //!< the instrument with the given MIDI key

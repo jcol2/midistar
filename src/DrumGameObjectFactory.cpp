@@ -38,7 +38,13 @@
 
 namespace midistar {
 
-const sf::Color DrumGameObjectFactory::BACKGROUND_COLOUR{0, 0, 0};
+const sf::Color DrumGameObjectFactory::BACKGROUND_COLOUR{40, 40, 40};
+
+const sf::Color DrumGameObjectFactory::DRUM_COLOURS[NUM_DRUM_COLOURS] {
+    sf::Color::Red, sf::Color::Green, sf::Color::Blue, sf::Color::Yellow
+    , sf::Color::Magenta, sf::Color::Cyan
+};
+
 
 DrumGameObjectFactory::DrumGameObjectFactory(
     double note_speed
@@ -78,6 +84,8 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     float w = static_cast<float>(note_width_ - padding_px * 2);
     float h = 100 * GetNoteSpeed();
     sf::RectangleShape* rect = new sf::RectangleShape{{w, h}};
+    rect->setFillColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
+            NUM_DRUM_COLOURS]);
 
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
@@ -105,7 +113,8 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     float w = static_cast<float>(note_width_ - padding_px * 2);
     float h = DRUM_HEIGHT;
     sf::RectangleShape* rect = new sf::RectangleShape{{w, h}};
-    rect->setFillColor(sf::Color::Red);
+    rect->setFillColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
+            NUM_DRUM_COLOURS]);
 
     // Create GameObject
     auto ins_note = new GameObject{rect, x + padding_px, y, w, h};
