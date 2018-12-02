@@ -90,6 +90,8 @@ if (WIN32)
         ${CMAKE_SOURCE_DIR}/dll/sfml-window-d-2.dll
     )
 
+    add_definitions("-DDEBUG")
+
     foreach(file_i ${WIN_THIRD_PARTY_DLLS})
         add_custom_command(
         TARGET midistar
