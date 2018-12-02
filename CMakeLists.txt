@@ -19,10 +19,17 @@ endif()
 
 # Find external libraries
 include_directories(include)
-link_directories(${CMAKE_SOURCE_DIR}/external/fluidsynth/src
+
+if (WIN32)
+    message("-- Windows detected")
+    set(CMAKE_CXX_FLAGS "-std=c++14")
+    link_directories(${CMAKE_SOURCE_DIR}/lib)
+else()    
+    link_directories(${CMAKE_SOURCE_DIR}/external/fluidsynth/src
     ${CMAKE_SOURCE_DIR}/external/midifile/lib/
     ${CMAKE_SOURCE_DIR}/external/rtmidi/.libs/
     ${CMAKE_SOURCE_DIR}/external/SFML/build/lib)
+endif()
 
 # Create executable
 add_executable(midistar
@@ -60,12 +67,59 @@ add_executable(midistar
     )
 
 # Link midistar
-target_link_libraries(midistar
-    midifile
-    rtmidi
-    sfml-graphics
-    sfml-system
-    sfml-window)
+if (WIN32)
+    target_link_libraries(midistar
+        fluidsynth
+        midifile
+        rtmidi
+        sfml-graphics-d
+        sfml-system-d
+        sfml-window-d)
+
+    set(WIN_THIRD_PARTY_DLLS
+        ${CMAKE_SOURCE_DIR}/dll/glib-2.dll
+        ${CMAKE_SOURCE_DIR}/dll/libcharset.dll
+        ${CMAKE_SOURCE_DIR}/dll/libfluidsynth-1.dll
+        ${CMAKE_SOURCE_DIR}/dll/libiconv.dll
+        ${CMAKE_SOURCE_DIR}/dll/libintl.dll
+        ${CMAKE_SOURCE_DIR}/dll/pcred.dll
+        ${CMAKE_SOURCE_DIR}/dll/sfml-audio-d-2.dll
+        ${CMAKE_SOURCE_DIR}/dll/sfml-graphics-d-2.dll
+        ${CMAKE_SOURCE_DIR}/dll/sfml-network-d-2.dll
+        ${CMAKE_SOURCE_DIR}/dll/sfml-system-d-2.dll
+        ${CMAKE_SOURCE_DIR}/dll/sfml-window-d-2.dll
+    )
+
+    foreach(file_i ${WIN_THIRD_PARTY_DLLS})
+        add_custom_command(
+        TARGET midistar
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+        ARGS -E copy ${file_i} "${CMAKE_BINARY_DIR}/bin/debug/.")
+    endforeach(file_i) 
+
+    # Copy Windows config (if it does not exist)
+    if (NOT EXISTS ${CMAKE_BINARY_DIR}/bin/debug/config.cfg)
+        add_custom_command(TARGET midistar POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_SOURCE_DIR}/data/windows.cfg
+            ${CMAKE_BINARY_DIR}/bin/debug/)
+
+        # Rename to 'config.cfg'
+        add_custom_command(TARGET midistar POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E rename
+            ${CMAKE_BINARY_DIR}/bin/debug/windows.cfg
+            ${CMAKE_BINARY_DIR}/bin/debug/config.cfg)
+    endif()
+
+else()
+    target_link_libraries(midistar
+        midifile
+        rtmidi
+        sfml-graphics
+        sfml-system
+        sfml-window)
+endif()
 
 # Handle OSX
 if (${APPLE})
@@ -113,7 +167,8 @@ if (${APPLE})
             ${CMAKE_SOURCE_DIR}/osx.cfg
             ../config.cfg)
     endif()
-else() # Assuming Linux
+elseif(UNIX)
+    message("-- UNIX detected")
     # fluidsynth is a normal library on Linux
     target_link_libraries(midistar
         fluidsynth)

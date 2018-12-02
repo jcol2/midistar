@@ -93,11 +93,11 @@ GameObject* DefaultGameObjectFactory::CreateInstrumentNote(int note) {
     double y = Config::GetInstance().GetScreenHeight() - INSTRUMENT_HEIGHT -
         (Config::GetInstance().GetScreenHeight() * INSTRUMENT_HOVER_PERCENTAGE);
     sf::RectangleShape* rect = new sf::RectangleShape{{static_cast<float>(
-            note_width_), INSTRUMENT_HEIGHT}};;
+            note_width_), static_cast<float>(INSTRUMENT_HEIGHT)}};;
     rect->setFillColor(sf::Color::Red);
 
     // Create GameObject
-    auto ins_note = new GameObject{rect, x, y, note_width_, INSTRUMENT_HEIGHT};
+    auto ins_note = new GameObject{rect, x, y, note_width_, static_cast<float>(INSTRUMENT_HEIGHT)};
 
     // Get key binding
     sf::Keyboard::Key key;
