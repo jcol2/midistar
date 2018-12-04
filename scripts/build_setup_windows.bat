@@ -5,6 +5,9 @@ SET lib_dir=%cd%/lib
 SET dll_dir=%cd%/dll
 SET inc_dir=%cd%/include
 
+echo Removing build folder...
+rd /q /s build
+
 echo Removing lib folder...
 rd /q /s lib
 mkdir lib
