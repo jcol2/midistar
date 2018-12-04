@@ -1,1 +1,1 @@
-../external/fluidsynth/include/fluidsynth.h
+../external/fluidsynth/build/include/fluidsynth.h
