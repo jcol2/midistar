@@ -4,6 +4,13 @@ dll/
 doc/html
 doc/latex
 lib/
+include/CLI
+include/fluidsynth
+include/fluidsynth.h
+include/midifile
+include/rtmidi
+include/SFML
+
 
 /config.cfg
 /debug

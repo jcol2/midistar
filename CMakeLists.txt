@@ -77,20 +77,18 @@ if (WIN32)
         sfml-window-d)
 
     set(WIN_THIRD_PARTY_DLLS
-        ${CMAKE_SOURCE_DIR}/dll/glib-2.dll
-        ${CMAKE_SOURCE_DIR}/dll/libcharset.dll
-        ${CMAKE_SOURCE_DIR}/dll/libfluidsynth-1.dll
-        ${CMAKE_SOURCE_DIR}/dll/libiconv.dll
-        ${CMAKE_SOURCE_DIR}/dll/libintl.dll
-        ${CMAKE_SOURCE_DIR}/dll/pcred.dll
-        ${CMAKE_SOURCE_DIR}/dll/sfml-audio-d-2.dll
-        ${CMAKE_SOURCE_DIR}/dll/sfml-graphics-d-2.dll
-        ${CMAKE_SOURCE_DIR}/dll/sfml-network-d-2.dll
-        ${CMAKE_SOURCE_DIR}/dll/sfml-system-d-2.dll
-        ${CMAKE_SOURCE_DIR}/dll/sfml-window-d-2.dll
+        ${CMAKE_SOURCE_DIR}/lib/glib-2.dll
+        ${CMAKE_SOURCE_DIR}/lib/libcharset.dll
+        ${CMAKE_SOURCE_DIR}/lib/libfluidsynth-1.dll
+        ${CMAKE_SOURCE_DIR}/lib/libiconv.dll
+        ${CMAKE_SOURCE_DIR}/lib/libintl.dll
+        ${CMAKE_SOURCE_DIR}/lib/pcred.dll
+        ${CMAKE_SOURCE_DIR}/lib/sfml-audio-d-2.dll
+        ${CMAKE_SOURCE_DIR}/lib/sfml-graphics-d-2.dll
+        ${CMAKE_SOURCE_DIR}/lib/sfml-network-d-2.dll
+        ${CMAKE_SOURCE_DIR}/lib/sfml-system-d-2.dll
+        ${CMAKE_SOURCE_DIR}/lib/sfml-window-d-2.dll
     )
-
-    add_definitions("-DDEBUG")
 
     foreach(file_i ${WIN_THIRD_PARTY_DLLS})
         add_custom_command(
@@ -99,6 +97,25 @@ if (WIN32)
         COMMAND ${CMAKE_COMMAND}
         ARGS -E copy ${file_i} "${CMAKE_BINARY_DIR}/bin/debug/.")
     endforeach(file_i) 
+
+    # Copy 'assets' folder
+    add_custom_target(
+        TARGET midistar
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/debug/assets")
+
+    set(WIN_ASSETS
+        ${CMAKE_SOURCE_DIR}/assets/grinding.png
+    )
+
+    foreach(file_i ${WIN_ASSETS})
+        add_custom_command(
+        TARGET midistar
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+        ARGS -E copy ${file_i} "${CMAKE_BINARY_DIR}/bin/debug/assets/.")
+    endforeach(file_i) 
+
 
     # Copy Windows config (if it does not exist)
     if (NOT EXISTS ${CMAKE_BINARY_DIR}/bin/debug/config.cfg)
@@ -113,6 +130,9 @@ if (WIN32)
             ${CMAKE_BINARY_DIR}/bin/debug/windows.cfg
             ${CMAKE_BINARY_DIR}/bin/debug/config.cfg)
     endif()
+
+    # Currently only DEBUG mode is supported
+    add_definitions("-DDEBUG")
 
 else()
     target_link_libraries(midistar
