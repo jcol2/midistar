@@ -98,12 +98,13 @@ if (WIN32)
         ARGS -E copy ${file_i} "${CMAKE_BINARY_DIR}/bin/debug/.")
     endforeach(file_i) 
 
-    # Copy 'assets' folder
-    add_custom_target(
+    # Create 'assets' folder
+    add_custom_command(
         TARGET midistar
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/debug/assets")
 
+    # Copy assets
     set(WIN_ASSETS
         ${CMAKE_SOURCE_DIR}/assets/grinding.png
     )
@@ -115,7 +116,6 @@ if (WIN32)
         COMMAND ${CMAKE_COMMAND}
         ARGS -E copy ${file_i} "${CMAKE_BINARY_DIR}/bin/debug/assets/.")
     endforeach(file_i) 
-
 
     # Copy Windows config (if it does not exist)
     if (NOT EXISTS ${CMAKE_BINARY_DIR}/bin/debug/config.cfg)
