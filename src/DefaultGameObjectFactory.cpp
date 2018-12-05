@@ -97,7 +97,8 @@ GameObject* DefaultGameObjectFactory::CreateInstrumentNote(int note) {
     rect->setFillColor(sf::Color::Red);
 
     // Create GameObject
-    auto ins_note = new GameObject{rect, x, y, note_width_, static_cast<float>(INSTRUMENT_HEIGHT)};
+    auto ins_note = new GameObject{rect, x, y, note_width_
+        , static_cast<float>(INSTRUMENT_HEIGHT)};
 
     // Get key binding
     sf::Keyboard::Key key;
