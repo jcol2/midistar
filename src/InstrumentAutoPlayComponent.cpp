@@ -24,9 +24,15 @@
 
 namespace midistar {
 
-InstrumentAutoPlayComponent::InstrumentAutoPlayComponent()
+InstrumentAutoPlayComponent::InstrumentAutoPlayComponent(
+    CollisionCriteria criteria)
         : CollisionHandlerComponent{Component::INSTRUMENT_AUTO_PLAY}
+        , collision_criteria_{criteria}
         , colliding_note_{nullptr} {
+}
+
+InstrumentAutoPlayComponent::InstrumentAutoPlayComponent()
+        : InstrumentAutoPlayComponent(CollisionCriteria::NONE) {
 }
 
 void InstrumentAutoPlayComponent::HandleCollisions(
@@ -62,7 +68,12 @@ void InstrumentAutoPlayComponent::HandleCollisions(
                 continue;
             }
             if (note->GetKey() == other_note->GetKey()) {
-                colliding_note_ = collider;
+                if (collision_criteria_ == CollisionCriteria::NONE
+                    || (collision_criteria_ == CollisionCriteria::CENTRE && 
+                        IsInCentre(o, collider)))
+                {
+                    colliding_note_ = collider;
+                }
             }
         }
     }
@@ -77,6 +88,24 @@ void InstrumentAutoPlayComponent::HandleCollisions(
 
     // If we have a collision with a note, activate instrument
     inpt_handler->SetActive(colliding_note_);
+}
+
+bool InstrumentAutoPlayComponent::IsInCentre(
+        GameObject* o
+        , GameObject* collider)
+{
+    // Get position and size info
+    double inst_x, inst_y, inst_w, inst_h;
+    o->GetPosition(&inst_x, &inst_y);
+    o->GetSize(&inst_w, &inst_h);
+
+    double note_x, note_y, note_w, note_h;
+    collider->GetPosition(&note_x, &note_y);
+    collider->GetSize(&note_w, &note_h);
+
+    // Check that note is vertically centred in the instrument
+    return (note_y >= inst_y
+        && ((note_y - inst_y) >= ((inst_h - note_h) / 2.0)));
 }
 
 }  // End namespace midistar
