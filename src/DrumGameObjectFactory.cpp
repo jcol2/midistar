@@ -31,7 +31,7 @@
 #include "midistar/NoteInfoComponent.h"
 #include "midistar/PhysicsComponent.h"
 #include "midistar/ResizeComponent.h"
-#include "midistar/PianoSongNoteCollisionHandlerComponent.h"
+#include "midistar/DrumSongNoteCollisionHandlerComponent.h"
 #include "midistar/SongNoteComponent.h"
 #include "midistar/Utility.h"
 #include "midistar/VerticalCollisionDetectorComponent.h"
@@ -103,7 +103,7 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     song_note->SetComponent(new PhysicsComponent{0, GetNoteSpeed()});
     song_note->SetComponent(new DeleteOffscreenComponent{});
     song_note->SetComponent(new VerticalCollisionDetectorComponent{});
-    song_note->SetComponent(new PianoSongNoteCollisionHandlerComponent{});
+    song_note->SetComponent(new DrumSongNoteCollisionHandlerComponent{});
     return song_note;
 }
 

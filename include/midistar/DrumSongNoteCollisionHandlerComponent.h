@@ -16,8 +16,8 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MIDISTAR_PIANOSONGNOTECOLLISIONHANDLERCOMPONENT_H_
-#define MIDISTAR_PIANOSONGNOTECOLLISIONHANDLERCOMPONENT_H_
+#ifndef MIDISTAR_DRUMSONGNOTECOLLISIONHANDLERCOMPONENT_H_
+#define MIDISTAR_DRUMSONGNOTECOLLISIONHANDLERCOMPONENT_H_
 
 #include <vector>
 
@@ -26,15 +26,15 @@
 namespace midistar {
 
 /**
- * The PianoSongNoteCollisionHandlerComponent class handles collisions between
- * song notes and other GameObjects.
+ * The DrumSongNoteCollisionHandlerComponent class handles collisions between song
+ * notes and other GameObjects.
  */
-class PianoSongNoteCollisionHandlerComponent : public CollisionHandlerComponent{
+class DrumSongNoteCollisionHandlerComponent : public CollisionHandlerComponent {
  public:
      /**
       * Constructor.
       */
-     PianoSongNoteCollisionHandlerComponent();
+	 DrumSongNoteCollisionHandlerComponent();
 
      /**
       * \copydoc CollisionHandlerComponent::HandleCollisions()
@@ -45,16 +45,10 @@ class PianoSongNoteCollisionHandlerComponent : public CollisionHandlerComponent{
              , std::vector<GameObject*> colliding_with);
 
  private:
-    static const char NOTE_COLLISION_CUTOFF = 20;  //!< Notes must be within
-        //!< this many pixels from the top of the instrument to be completely
-        //!< played.
-
     bool HandleCollision(Game* g, GameObject* o, GameObject* collider);
                //!< Handles a collision returns true if it's a valid collision
-
-    GameObject* grinding_;  //!< Holds GameObject display metal grinding effect
 };
 
 }  // End namespace midistar
 
-#endif  // MIDISTAR_PIANOSONGNOTECOLLISIONHANDLERCOMPONENT_H_
+#endif  // MIDISTAR_DRUMSONGNOTECOLLISIONHANDLERCOMPONENT_H_
