@@ -134,6 +134,18 @@ if (WIN32)
     # Currently only DEBUG mode is supported
     add_definitions("-DDEBUG")
 
+    # Copy Windows run script
+    add_custom_command(TARGET midistar POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/scripts/run_windows.bat
+        ${CMAKE_SOURCE_DIR}/.)
+
+    # Rename to 'run.bat'
+    add_custom_command(TARGET midistar POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E rename
+            ${CMAKE_SOURCE_DIR}/run_windows.bat
+            ../run.bat)
+
 else()
     target_link_libraries(midistar
         midifile
@@ -234,10 +246,17 @@ elseif(UNIX)
     endif()
 endif()
 
-# Copy 'make' script
-add_custom_command(TARGET midistar POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_SOURCE_DIR}/scripts/make
-    ${CMAKE_SOURCE_DIR}/.)
-
+if (WIN32)
+    # Copy 'make.bat' script
+    add_custom_command(TARGET midistar POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/scripts/make.bat
+        ${CMAKE_SOURCE_DIR}/.)
+else()
+    # Copy 'make' script
+    add_custom_command(TARGET midistar POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/scripts/make
+        ${CMAKE_SOURCE_DIR}/.)
+endif()
 
