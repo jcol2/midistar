@@ -31,9 +31,22 @@ namespace midistar {
  */
 class InstrumentAutoPlayComponent : public CollisionHandlerComponent {
  public:
+     enum class CollisionCriteria {
+         NONE = 0,
+         CENTRE = 1
+     };
+
      /**
       * Constructor.
+      *
+      * \param criteria The collision criteria that must be met to start auto 
+      * playing a note.
       */
+     InstrumentAutoPlayComponent(CollisionCriteria criteria);
+
+     /**
+     * Default constructor.
+     */
      InstrumentAutoPlayComponent();
 
      /**
@@ -45,9 +58,15 @@ class InstrumentAutoPlayComponent : public CollisionHandlerComponent {
              , std::vector<GameObject*> colliding_with);
 
  private:
+    static constexpr double CENTRE_EPSILON = 2.0;
+
     void HandleCollision(Game* g, GameObject* o, GameObject* collider);
                                                      //!< Handles a collision
+    bool IsInCentre(GameObject* o, GameObject* collider);  //!< Checks if a
+                                            //!< collision is in the centre of o
 
+    CollisionCriteria collision_criteria_;  //!< Indicates collision criteria to
+      //!< that needs to be met before auto play will begin for a specific note.
     GameObject* colliding_note_;  //!< Holds the note we are colliding with. We
                      //!< need to keep track of this to play overlapping notes.
 };

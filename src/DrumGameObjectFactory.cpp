@@ -137,7 +137,8 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     ins_note->SetComponent(new InstrumentInputHandlerComponent{key, ctrl
             , shift});
     ins_note->SetComponent(new VerticalCollisionDetectorComponent{});
-    ins_note->SetComponent(new InstrumentAutoPlayComponent{});
+    ins_note->SetComponent(new InstrumentAutoPlayComponent{
+            InstrumentAutoPlayComponent::CollisionCriteria::CENTRE});
     return ins_note;
 }
 
