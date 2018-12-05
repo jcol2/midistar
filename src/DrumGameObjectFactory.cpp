@@ -25,7 +25,7 @@
 #include "midistar/Config.h"
 #include "midistar/DeleteOffscreenComponent.h"
 #include "midistar/Game.h"
-#include "midistar/InstrumentCollisionHandlerComponent.h"
+#include "midistar/InstrumentAutoPlayComponent.h"
 #include "midistar/InstrumentComponent.h"
 #include "midistar/InstrumentInputHandlerComponent.h"
 #include "midistar/NoteInfoComponent.h"
@@ -137,7 +137,7 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     ins_note->SetComponent(new InstrumentInputHandlerComponent{key, ctrl
             , shift});
     ins_note->SetComponent(new VerticalCollisionDetectorComponent{});
-    ins_note->SetComponent(new InstrumentCollisionHandlerComponent{});
+    ins_note->SetComponent(new InstrumentAutoPlayComponent{});
     return ins_note;
 }
 
