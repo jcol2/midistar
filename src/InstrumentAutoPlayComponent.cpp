@@ -16,7 +16,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "midistar/InstrumentCollisionHandlerComponent.h"
+#include "midistar/InstrumentAutoPlayComponent.h"
 
 #include "midistar/Config.h"
 #include "midistar/InstrumentInputHandlerComponent.h"
@@ -24,12 +24,12 @@
 
 namespace midistar {
 
-InstrumentCollisionHandlerComponent::InstrumentCollisionHandlerComponent()
-        : CollisionHandlerComponent{Component::INSTRUMENT_COLLISION_HANDLER}
+InstrumentAutoPlayComponent::InstrumentAutoPlayComponent()
+        : CollisionHandlerComponent{Component::INSTRUMENT_AUTO_PLAY}
         , colliding_note_{nullptr} {
 }
 
-void InstrumentCollisionHandlerComponent::HandleCollisions(
+void InstrumentAutoPlayComponent::HandleCollisions(
         Game*
         , GameObject* o
         , std::vector<GameObject*> colliding_with) {

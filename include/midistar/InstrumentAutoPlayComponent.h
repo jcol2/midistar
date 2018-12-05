@@ -16,8 +16,8 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MIDISTAR_INSTRUMENTCOLLISIONHANDLERCOMPONENT_H_
-#define MIDISTAR_INSTRUMENTCOLLISIONHANDLERCOMPONENT_H_
+#ifndef MIDISTAR_INSTRUMENTAUTOPLAYCOMPONENT_H_
+#define MIDISTAR_INSTRUMENTAUTOPLAYCOMPONENT_H_
 
 #include <vector>
 
@@ -26,15 +26,15 @@
 namespace midistar {
 
 /**
- * The InstrumentCollisionHandlerComponent class handles collisions between song
- * notes and other GameObjects.
+ * The InstrumentAutoPlayComponent class adds auto play functionality to 
+ * instruments.
  */
-class InstrumentCollisionHandlerComponent : public CollisionHandlerComponent {
+class InstrumentAutoPlayComponent : public CollisionHandlerComponent {
  public:
      /**
       * Constructor.
       */
-     InstrumentCollisionHandlerComponent();
+     InstrumentAutoPlayComponent();
 
      /**
       * \copydoc CollisionHandlerComponent::HandleCollisions()
@@ -54,4 +54,4 @@ class InstrumentCollisionHandlerComponent : public CollisionHandlerComponent {
 
 }  // End namespace midistar
 
-#endif  // MIDISTAR_INSTRUMENTCOLLISIONHANDLERCOMPONENT_H_
+#endif  // MIDISTAR_INSTRUMENTAUTOPLAYCOMPONENT_H_

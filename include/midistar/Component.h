@@ -49,7 +49,7 @@ class Component {
         , COLLIDABLE
         , NOTE_INFO
         , INSTRUMENT_INPUT_HANDLER
-        , INSTRUMENT_COLLISION_HANDLER
+        , INSTRUMENT_AUTO_PLAY
         , TRANSFORMATION
         , INVERT_COLOUR
         , MIDI_NOTE
