@@ -20,6 +20,7 @@
 #define MIDISTAR_UTILITY_H_
 
 #include <vector>
+#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
 namespace midistar {
@@ -31,13 +32,33 @@ namespace midistar {
 class Utility {
  public:
     /**
+     * Darkens a colour.
+     *
+     * \param c The colour to darken.
+     * \return A darker colour.
+     */
+    static const sf::Color Utility::DarkenColour(sf::Color c);
+
+    /**
      * Gets a list of keyboard keys in QWERTY order.
      *
      * \return Keyboard keys in QWERTY order.
      */
     static const std::vector<sf::Keyboard::Key>& GetQwertyKeys();
 
+    /**
+     * Transforms a colour by a given multiplier.
+     *
+     * \param c The colour to transform.
+     * \param t The factor to multiply R, G, and B values by.
+     * \return A transformed colour.
+     */
+    static const sf::Color Utility::TransformColour(sf::Color c, double t);
+
  private:
+     static constexpr float COLOUR_DARKEN_MULTIPLIER = 0.4f;  //!< Multiple R,
+               //!< G, and B colour channels by this multiplier during darkening
+
     static const std::vector<sf::Keyboard::Key> qwerty_keys_;  //!< Holds a list
                                                    //!< of keys in QWERTY order
 };

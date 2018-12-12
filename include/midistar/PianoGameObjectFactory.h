@@ -67,8 +67,6 @@ class PianoGameObjectFactory : public GameObjectFactory {
 
  private:
     static const sf::Color BACKGROUND_COLOUR;  //!< Background colour
-    static constexpr float COLOUR_DARKEN_MULTIPLIER = 0.4f;  //!< Multiple R,
-              //!< G, and B colour channels by this multiplier during darkening
     static constexpr float BLACK_WIDTH_MULTIPLIER = 0.5f;  //!< Black keys and
                         //! notes have a different width to white counterparts
     static const int GRINDING_FRAMES_PER_SECOND = 18;  //!< Grinding sprite FPS
@@ -104,7 +102,6 @@ class PianoGameObjectFactory : public GameObjectFactory {
     static const sf::Color MIDI_TRACK_COLOURS[NUM_TRACK_COLOURS];  //!< Holds
                                                         //!< MIDI track colours
 
-    static sf::Color DarkenColour(sf::Color c);  //! Darken a colour
     static sf::Color GetTrackColour(int midi_track);  //!< Get colour for track
     static void GetInstrumentKeyBinding(int midi_key, sf::Keyboard::Key* key,
             bool* ctrl, bool* shift);  //!< Gets instrument key binding

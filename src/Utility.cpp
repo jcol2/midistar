@@ -51,4 +51,16 @@ const std::vector<sf::Keyboard::Key>& Utility::GetQwertyKeys() {
     return qwerty_keys_;
 }
 
+const sf::Color Utility::DarkenColour(sf::Color c) {
+    return Utility::TransformColour(c, Utility::COLOUR_DARKEN_MULTIPLIER);
+}
+
+const sf::Color Utility::TransformColour(sf::Color c, double t) {
+    c.r *= t;
+    c.g *= t;
+    c.b *= t;
+    return c;
+}
+
+
 }  // End namespace midistar

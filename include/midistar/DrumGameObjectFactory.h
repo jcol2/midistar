@@ -72,15 +72,19 @@ class DrumGameObjectFactory : public GameObjectFactory {
     static const sf::Color BACKGROUND_COLOUR;  //!< Background colour
     static const int DRUM_HEIGHT = 50;     //!< Drum height
     static constexpr float DRUM_PADDING_PERCENT = 0.1;  //!< Padding percentage
+    static const sf::Color INSTRUMENT_FILL_COLOUR;  //!< Drum fill colour
     static constexpr float INSTRUMENT_HOVER_PERCENTAGE = 0.1f;  //!< The
              //!< percentage of the screen height that instruments will hover
+    static constexpr float INSTRUMENT_OUTLINE_THICKNESS = -10.0f;  //!< Outline 
+                                                        //!< thickness of drums
     static const int MAX_DRUM_WIDTH = 200;  //!< Max drum width
     static const int NUM_DRUM_COLOURS = 6;  //!< Num drum colours
     static const int MAX_NOTE_HEIGHT = 30;  //!< Max note height
     static const int NOTE_HEIGHT_MULTIPLIER = 200;  //!< Determines note height
+    static constexpr float NOTE_OUTLINE_THICKNESS = -3.0f;  //!< Outline 
+                                                    //!< thickness of notes
     static const int NUM_MIDI_KEYS = 128;  //!< Maximum MIDI key
     static const sf::Color OUTLINE_COLOUR;  //!< Outline colour
-    static constexpr float OUTLINE_THICKNESS = -3.0f;  //!< Outline thickness
 
     static const sf::Color DRUM_COLOURS[NUM_DRUM_COLOURS];  //!< Holds drum
                                                                   //!< colours
