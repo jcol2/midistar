@@ -40,12 +40,12 @@ add_executable(midistar
     src/Config.cpp
     src/DefaultGameObjectFactory.cpp
     src/DeleteOffscreenComponent.cpp
-    src/DeleteOffscreenComponent.cpp
     src/DrumGameObjectFactory.cpp
+    src/DrumSongNoteCollisionHandlerComponent.cpp
     src/Game.cpp
     src/GameObject.cpp
     src/GameObjectFactory.cpp
-    src/InstrumentCollisionHandlerComponent.cpp
+    src/InstrumentAutoPlayComponent.cpp
     src/InstrumentComponent.cpp
     src/InstrumentInputHandlerComponent.cpp
     src/InvertColourComponent.cpp
@@ -60,8 +60,8 @@ add_executable(midistar
     src/NoteInfoComponent.cpp
     src/PhysicsComponent.cpp
     src/PianoGameObjectFactory.cpp
-    src/ResizeComponent.cpp
-    src/SongNoteCollisionHandlerComponent.cpp
+    src/PianoSongNoteCollisionHandlerComponent.cpp
+    src/ResizeComponent.cpp    
     src/SongNoteComponent.cpp
     src/SpriteAnimatorComponent.cpp
     src/Utility.cpp
