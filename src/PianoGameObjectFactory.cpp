@@ -113,7 +113,7 @@ GameObject* PianoGameObjectFactory::CreateSongNote(
     sf::Color colour = GetTrackColour(track);
     if (IsBlackKey(note)) {
         // Darken sharp notes and change width
-        colour = DarkenColour(colour);
+        colour = Utility::DarkenColour(colour);
         width = white_width_ * BLACK_WIDTH_MULTIPLIER;
     } else {
         width = white_width_;
@@ -144,13 +144,6 @@ GameObject* PianoGameObjectFactory::CreateSongNote(
 
 bool PianoGameObjectFactory::Init() {
     return grinding_texture_.loadFromFile(GRINDING_TEXTURE_PATH);
-}
-
-sf::Color PianoGameObjectFactory::DarkenColour(sf::Color c) {
-    c.r *= COLOUR_DARKEN_MULTIPLIER;
-    c.g *= COLOUR_DARKEN_MULTIPLIER;
-    c.b *= COLOUR_DARKEN_MULTIPLIER;
-    return c;
 }
 
 sf::Color PianoGameObjectFactory::GetTrackColour(int midi_track) {

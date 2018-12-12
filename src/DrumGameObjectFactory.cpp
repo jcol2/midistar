@@ -38,14 +38,16 @@
 
 namespace midistar {
 
-const sf::Color DrumGameObjectFactory::BACKGROUND_COLOUR{40, 40, 40};
+const sf::Color DrumGameObjectFactory::BACKGROUND_COLOUR{ 40, 40, 40 };
 
 const sf::Color DrumGameObjectFactory::DRUM_COLOURS[NUM_DRUM_COLOURS] {
     sf::Color::Red, sf::Color::Green, sf::Color::Blue, sf::Color::Yellow
     , sf::Color::Magenta, sf::Color::Cyan
 };
 
-const sf::Color DrumGameObjectFactory::OUTLINE_COLOUR{0, 0, 0};
+const sf::Color DrumGameObjectFactory::INSTRUMENT_FILL_COLOUR{ 150, 150, 150 };
+
+const sf::Color DrumGameObjectFactory::OUTLINE_COLOUR{ 0, 0, 0 };
 
 DrumGameObjectFactory::DrumGameObjectFactory(
     double note_speed
@@ -82,19 +84,17 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     // Create underlying shape
     double x = GetXPosition(note);
     double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    float w = static_cast<float>(note_width_ - padding_px * 2);
-    float h = std::min(GetNoteSpeed() * NOTE_HEIGHT_MULTIPLIER,
-            static_cast<double>(MAX_NOTE_HEIGHT));
-    sf::RectangleShape* rect = new sf::RectangleShape{{w, h}};
-    rect->setFillColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
-            NUM_DRUM_COLOURS]);
-    rect->setOutlineColor(OUTLINE_COLOUR);
-    rect->setOutlineThickness(OUTLINE_THICKNESS);
+    float d = static_cast<float>(note_width_ - padding_px * 2);
+    sf::CircleShape* circle = new sf::CircleShape{d / 2.0f};
+    auto colour = DRUM_COLOURS[GetNoteUniqueIndex(note) % NUM_DRUM_COLOURS];
+    circle->setFillColor(colour);
+    circle->setOutlineColor(OUTLINE_COLOUR);
+    circle->setOutlineThickness(NOTE_OUTLINE_THICKNESS);
 
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
     // entire height over its duration).
-    auto song_note = new GameObject{rect, x + padding_px, -h, w, h};
+    auto song_note = new GameObject{ circle, x + padding_px, -d, d, d};
 
     // Add components
     song_note->SetComponent(new SongNoteComponent{});
@@ -114,16 +114,15 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
         (Config::GetInstance().GetScreenHeight() * INSTRUMENT_HOVER_PERCENTAGE);
 
     double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    float w = static_cast<float>(note_width_ - padding_px * 2);
-    float h = DRUM_HEIGHT;
-    sf::RectangleShape* rect = new sf::RectangleShape{{w, h}};
-    rect->setFillColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
-            NUM_DRUM_COLOURS]);
-    rect->setOutlineColor(OUTLINE_COLOUR);
-    rect->setOutlineThickness(OUTLINE_THICKNESS);
+    float d = static_cast<float>(note_width_ - padding_px * 2);
+    sf::CircleShape* circle = new sf::CircleShape{ d / 2.0f };
+    circle->setFillColor(INSTRUMENT_FILL_COLOUR);
+    circle->setOutlineColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
+        NUM_DRUM_COLOURS]);
+    circle->setOutlineThickness(INSTRUMENT_OUTLINE_THICKNESS);
 
     // Create GameObject
-    auto ins_note = new GameObject{rect, x + padding_px, y, w, h};
+    auto ins_note = new GameObject{circle, x + padding_px, y, d, d};
 
     // Get key binding
     sf::Keyboard::Key key;
