@@ -80,11 +80,13 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
         , int chan
         , int note
         , int vel
-        , double) {
+        , double duration) {
     // Create underlying shape
     double x = GetXPosition(note);
     double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    float d = static_cast<float>(note_width_ - padding_px * 2);
+    float max_height = duration * 1000 * GetNoteSpeed();
+    float max_width = note_width_ - padding_px * 2;
+    float d = std::min(max_height, max_width);
     sf::CircleShape* circle = new sf::CircleShape{d / 2.0f};
     auto colour = DRUM_COLOURS[GetNoteUniqueIndex(note) % NUM_DRUM_COLOURS];
     circle->setFillColor(colour);
@@ -94,7 +96,7 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
     // entire height over its duration).
-    auto song_note = new GameObject{ circle, x + padding_px, -d, d, d};
+    auto song_note = new GameObject{ circle, x + padding_px, -d / 2.0, d, d};
 
     // Add components
     song_note->SetComponent(new SongNoteComponent{});
