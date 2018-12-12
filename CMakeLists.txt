@@ -39,7 +39,7 @@ add_executable(midistar
     src/Component.cpp
     src/Config.cpp
     src/DefaultGameObjectFactory.cpp
-    src/DeleteOffscreenComponent.cpp
+    src/DeleteOffscreenComponent.cpp    
     src/Game.cpp
     src/GameObject.cpp
     src/GameObjectFactory.cpp
@@ -98,37 +98,18 @@ if (WIN32)
         ARGS -E copy ${file_i} "${CMAKE_BINARY_DIR}/bin/debug/.")
     endforeach(file_i) 
 
-    # Create 'assets' folder
-    add_custom_command(
-        TARGET midistar
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/bin/debug/assets")
-
-    # Copy assets
-    set(WIN_ASSETS
-        ${CMAKE_SOURCE_DIR}/assets/grinding.png
-    )
-
-    foreach(file_i ${WIN_ASSETS})
-        add_custom_command(
-        TARGET midistar
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND}
-        ARGS -E copy ${file_i} "${CMAKE_BINARY_DIR}/bin/debug/assets/.")
-    endforeach(file_i) 
-
     # Copy Windows config (if it does not exist)
-    if (NOT EXISTS ${CMAKE_BINARY_DIR}/bin/debug/config.cfg)
+    if (NOT EXISTS ${CMAKE_SOURCE_DIR}/config.cfg)
         add_custom_command(TARGET midistar POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
             ${CMAKE_SOURCE_DIR}/data/windows.cfg
-            ${CMAKE_BINARY_DIR}/bin/debug/)
+            ${CMAKE_SOURCE_DIR}/.)
 
         # Rename to 'config.cfg'
         add_custom_command(TARGET midistar POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E rename
-            ${CMAKE_BINARY_DIR}/bin/debug/windows.cfg
-            ${CMAKE_BINARY_DIR}/bin/debug/config.cfg)
+            ${CMAKE_SOURCE_DIR}/windows.cfg
+            ${CMAKE_SOURCE_DIR}/config.cfg)
     endif()
 
     # Currently only DEBUG mode is supported

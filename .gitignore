@@ -18,6 +18,8 @@ include/SFML
 /TODO
 /make
 /run
+/run.bat
+/make.bat
 
 *.mid
 *.swp
