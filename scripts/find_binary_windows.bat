@@ -2,11 +2,9 @@
 REM Change to script dir:
 cd "%~dp0"
 
-REM Check directory:
+REM Change to source dir if we're in the scripts folder:
 FOR %%I in (.) do SET dir=%%~nxI
-IF "%dir%"=="scripts" (
-	cd ..
-)
+IF "%dir%"=="scripts" (cd ..)
 
 REM Check for 'build' folder:
 IF NOT EXIST "build\" (

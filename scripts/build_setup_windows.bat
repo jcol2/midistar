@@ -1,4 +1,11 @@
 @echo off
+REM Change to script dir:
+cd "%~dp0"
+
+REM Change to source dir if we're in the scripts folder:
+FOR %%I in (.) do SET dir=%%~nxI
+IF "%dir%"=="scripts" (cd ..)
+
 SET midistar_dir=%cd%
 SET ext_dir=%cd%/external
 SET lib_dir=%cd%/lib
