@@ -42,7 +42,7 @@ class InstrumentAutoPlayComponent : public CollisionHandlerComponent {
       * \param criteria The collision criteria that must be met to start auto 
       * playing a note.
       */
-     InstrumentAutoPlayComponent(CollisionCriteria criteria);
+     explicit InstrumentAutoPlayComponent(CollisionCriteria criteria);
 
      /**
      * Default constructor.

@@ -69,9 +69,8 @@ void InstrumentAutoPlayComponent::HandleCollisions(
             }
             if (note->GetKey() == other_note->GetKey()) {
                 if (collision_criteria_ == CollisionCriteria::NONE
-                    || (collision_criteria_ == CollisionCriteria::CENTRE && 
-                        IsInCentre(o, collider)))
-                {
+                    || (collision_criteria_ == CollisionCriteria::CENTRE &&
+                        IsInCentre(o, collider))) {
                     colliding_note_ = collider;
                 }
             }
@@ -92,8 +91,7 @@ void InstrumentAutoPlayComponent::HandleCollisions(
 
 bool InstrumentAutoPlayComponent::IsInCentre(
         GameObject* o
-        , GameObject* collider)
-{
+        , GameObject* collider) {
     // Get position and size info
     double inst_x, inst_y, inst_w, inst_h;
     o->GetPosition(&inst_x, &inst_y);

@@ -34,7 +34,7 @@ class DrumSongNoteCollisionHandlerComponent : public CollisionHandlerComponent {
      /**
       * Constructor.
       */
-	 DrumSongNoteCollisionHandlerComponent();
+     DrumSongNoteCollisionHandlerComponent();
 
      /**
       * \copydoc CollisionHandlerComponent::HandleCollisions()
