@@ -38,10 +38,13 @@ class DrumGameObjectFactory : public GameObjectFactory {
      *
      * \param note_speed The falling speed of notes.
      * \param song_notes Unique MIDI notes in the song.
+     * \param max_note_duration The maximum duration of any MIDI note in the
+     * song.
      */
     explicit DrumGameObjectFactory(
             double note_speed
-            , const std::vector<int>& song_notes);
+            , const std::vector<int>& song_notes
+            , double max_note_duration);
 
     /**
      * \copydoc GameObjectFactory::CreateNotePlayEffect()
@@ -70,7 +73,7 @@ class DrumGameObjectFactory : public GameObjectFactory {
 
  private:
     static const sf::Color BACKGROUND_COLOUR;  //!< Background colour
-    static const int DRUM_HEIGHT = 50;     //!< Drum height
+    static const int DRUM_HEIGHT = 150;     //!< Drum height
     static constexpr float DRUM_PADDING_PERCENT = 0.1;  //!< Padding percentage
     static const sf::Color INSTRUMENT_FILL_COLOUR;  //!< Drum fill colour
     static constexpr float INSTRUMENT_HOVER_PERCENTAGE = 0.1f;  //!< The
@@ -98,9 +101,10 @@ class DrumGameObjectFactory : public GameObjectFactory {
     double GetXPosition(int note);  //!< Gets the X position of a song
                                                          //!< note / instrument
 
-    double centred_;
     double note_width_;  //!< Holds the width of song notes
     std::vector<int> song_notes_;  //!< Unique MIDI notes in the song
+    double x_pos_offset_;  //!< Defines offset for X coord
+    double y_pos_offset_;  //!< Defines offset for Y coord
 };
 
 }  // End namespace midistar

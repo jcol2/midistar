@@ -51,14 +51,16 @@ const sf::Color DrumGameObjectFactory::OUTLINE_COLOUR{ 0, 0, 0 };
 
 DrumGameObjectFactory::DrumGameObjectFactory(
     double note_speed
-    , const std::vector<int>& song_notes)
+    , const std::vector<int>& song_notes
+    , double max_note_duration)
         : GameObjectFactory{note_speed, BACKGROUND_COLOUR}
         , note_width_{Config::GetInstance().GetScreenWidth() /
             static_cast<double>(song_notes.size())}
         , song_notes_{song_notes} {
     note_width_ = std::min(note_width_, static_cast<double>(MAX_DRUM_WIDTH));
-    centred_ = Config::GetInstance().GetScreenWidth() / 2  -
+    x_pos_offset_ = Config::GetInstance().GetScreenWidth() / 2  -
         (song_notes.size() * note_width_ / 2);
+    y_pos_offset_ = (max_note_duration * 1000 * GetNoteSpeed()) / 2.0;
 }
 
 GameObject* DrumGameObjectFactory::CreateNotePlayEffect(GameObject*) {
@@ -96,7 +98,8 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
     // entire height over its duration).
-    auto song_note = new GameObject{ circle, x + padding_px, -d / 2.0, d, d};
+    auto y_pos = (-d / 2.0) - y_pos_offset_;
+    auto song_note = new GameObject{ circle, x + padding_px, y_pos, d, d};
 
     // Add components
     song_note->SetComponent(new SongNoteComponent{});
@@ -116,7 +119,9 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
         (Config::GetInstance().GetScreenHeight() * INSTRUMENT_HOVER_PERCENTAGE);
 
     double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    float d = static_cast<float>(note_width_ - padding_px * 2);
+    double max_width = note_width_ - padding_px * 2;
+    float d = static_cast<float>(std::min(max_width
+        , static_cast<double>(DRUM_HEIGHT)));
     sf::CircleShape* circle = new sf::CircleShape{ d / 2.0f };
     circle->setFillColor(INSTRUMENT_FILL_COLOUR);
     circle->setOutlineColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
@@ -165,7 +170,7 @@ int DrumGameObjectFactory::GetNoteUniqueIndex(int note) {
 }
 
 double DrumGameObjectFactory::GetXPosition(int note) {
-    return centred_ + GetNoteUniqueIndex(note) * note_width_;
+    return x_pos_offset_ + GetNoteUniqueIndex(note) * note_width_;
 }
 
 bool DrumGameObjectFactory::Init() {

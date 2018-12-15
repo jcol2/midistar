@@ -44,6 +44,12 @@ class MidiFileIn : public MidiIn {
     ~MidiFileIn();
 
     /**
+     * Gets the maximum duration of all notes in the MIDI file.
+     *
+     */
+    double GetMaximumNoteDuration() const;
+
+    /**
      * Gets the ticks per quarter note of the MIDI file.
      *
      * \return Ticks per qurater note.
@@ -84,8 +90,8 @@ class MidiFileIn : public MidiIn {
     static const int MAX_MIDI_CHANNELS = 16;
     static const int MAX_MIDI_TRACKS = 128;
 
-    bool IsWanted(smf::MidiEvent* mev);  //!< Determines if we want to store a
-                                                             //!< MIDI message
+    bool IsWanted(const smf::MidiEvent* mev) const;  //!< Determines if we want
+                                                    //!< to store a MIDI message
 
     bool channels_[MAX_MIDI_CHANNELS];  //!< The channels to read from. Each
             //!< index represents a channel. Only read from channels with true.
