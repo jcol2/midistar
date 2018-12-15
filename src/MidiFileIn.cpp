@@ -34,6 +34,16 @@ MidiFileIn::MidiFileIn()
 MidiFileIn::~MidiFileIn() {
 }
 
+double MidiFileIn::GetMaximumNoteDuration() const {
+    double max = 0;
+    for (int i = 0; i < file_[0].size(); ++i) {
+        if (IsWanted(&file_[0][i])) {
+            max = std::max(max, file_[0][i].getDurationInSeconds());
+        }
+    }
+    return max;
+}
+
 int MidiFileIn::GetTicksPerQuarterNote() const {
     return file_.getTicksPerQuarterNote();
 }
@@ -79,6 +89,7 @@ bool MidiFileIn::Init(const std::string& file_name) {
     bool success = file_.status();
     file_.joinTracks();
     file_.linkNotePairs();
+    file_.doTimeAnalysis();
     if (!success) {
         std::cerr << "Error! Could not load MIDI file \"" << file_name << "\""
         << ".\n";
@@ -114,7 +125,7 @@ void MidiFileIn::Tick(int delta) {
     }
 }
 
-bool MidiFileIn::IsWanted(smf::MidiEvent* mev) {
+bool MidiFileIn::IsWanted(const smf::MidiEvent* mev) const {
     if (!mev->isNoteOn() && !mev->isNoteOff()) {
         return false;
     }
