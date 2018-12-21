@@ -82,7 +82,7 @@ class DrumGameObjectFactory : public GameObjectFactory {
                                                         //!< thickness of drums
     static const int MAX_DRUM_WIDTH = 200;  //!< Max drum width
     static const int NUM_DRUM_COLOURS = 6;  //!< Num drum colours
-    static const int MAX_NOTE_HEIGHT = 30;  //!< Max note height
+    static const int MAX_NOTE_HEIGHT = 200;  //!< Max note height
     static const int NOTE_HEIGHT_MULTIPLIER = 200;  //!< Determines note height
     static constexpr float NOTE_OUTLINE_THICKNESS = -3.0f;  //!< Outline
                                                     //!< thickness of notes
@@ -102,9 +102,11 @@ class DrumGameObjectFactory : public GameObjectFactory {
                                                          //!< note / instrument
 
     double note_width_;  //!< Holds the width of song notes
+    double song_note_y_offset_;  //!< Offset used to spawn song notes above the
+                                                                 //!< screen
     std::vector<int> song_notes_;  //!< Unique MIDI notes in the song
-    double x_pos_offset_;  //!< Defines offset for X coord
-    double y_pos_offset_;  //!< Defines offset for Y coord
+    double x_pos_offset_;  //!< Defines offset for X coord for note and
+                                                                //!< instruments
 };
 
 }  // End namespace midistar
