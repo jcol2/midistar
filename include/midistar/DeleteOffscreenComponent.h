@@ -42,7 +42,7 @@ class DeleteOffscreenComponent : public Component {
     virtual void Update(Game* g, GameObject* o, int delta);
 
  private:
-    static const int THRESHOLD = 100;  //!< X/Y off-screen threshold
+    static const int THRESHOLD = 500;  //!< X/Y off-screen threshold
 };
 
 }   // End namespace midistar

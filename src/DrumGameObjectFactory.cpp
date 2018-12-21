@@ -60,7 +60,7 @@ DrumGameObjectFactory::DrumGameObjectFactory(
     note_width_ = std::min(note_width_, static_cast<double>(MAX_DRUM_WIDTH));
     x_pos_offset_ = Config::GetInstance().GetScreenWidth() / 2  -
         (song_notes.size() * note_width_ / 2);
-    y_pos_offset_ = (max_note_duration * 1000 * GetNoteSpeed()) / 2.0;
+    song_note_y_offset_ = (max_note_duration * 1000 * GetNoteSpeed()) / 2.0;
 }
 
 GameObject* DrumGameObjectFactory::CreateNotePlayEffect(GameObject*) {
@@ -86,9 +86,7 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     // Create underlying shape
     double x = GetXPosition(note);
     double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    float max_height = duration * 1000 * GetNoteSpeed();
-    float max_width = note_width_ - padding_px * 2;
-    float d = std::min(max_height, max_width);
+    float d = duration * 1000 * GetNoteSpeed() * 0.5f;
     sf::CircleShape* circle = new sf::CircleShape{d / 2.0f};
     auto colour = DRUM_COLOURS[GetNoteUniqueIndex(note) % NUM_DRUM_COLOURS];
     circle->setFillColor(colour);
@@ -98,7 +96,7 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
     // entire height over its duration).
-    auto y_pos = (-d / 2.0) - y_pos_offset_;
+    auto y_pos = (-d / 2.0) - song_note_y_offset_;
     auto song_note = new GameObject{ circle, x + padding_px, y_pos, d, d};
 
     // Add components
