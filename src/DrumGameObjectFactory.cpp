@@ -54,13 +54,14 @@ DrumGameObjectFactory::DrumGameObjectFactory(
     , const std::vector<int>& song_notes
     , double max_note_duration)
         : GameObjectFactory{note_speed, BACKGROUND_COLOUR}
-        , note_width_{Config::GetInstance().GetScreenWidth() /
+        , drum_radius_{Config::GetInstance().GetScreenWidth() /
             static_cast<double>(song_notes.size())}
         , song_notes_{song_notes} {
-    note_width_ = std::min(note_width_, static_cast<double>(MAX_DRUM_WIDTH));
+    double max_drum_radius = std::min(Config::GetInstance().GetScreenHeight()
+        , Config::GetInstance().GetScreenWidth()) * MAX_DRUM_RADIUS_PERCENT;
+    drum_radius_ = std::min(drum_radius_, max_drum_radius);
     x_pos_offset_ = Config::GetInstance().GetScreenWidth() / 2  -
-        (song_notes.size() * note_width_ / 2);
-    song_note_y_offset_ = (max_note_duration * 1000 * GetNoteSpeed()) / 2.0;
+        (song_notes.size() * drum_radius_);
 }
 
 GameObject* DrumGameObjectFactory::CreateNotePlayEffect(GameObject*) {
@@ -85,9 +86,10 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
         , double duration) {
     // Create underlying shape
     double x = GetXPosition(note);
-    double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    float d = duration * 1000 * GetNoteSpeed() * 0.5f;
-    sf::CircleShape* circle = new sf::CircleShape{d / 2.0f};
+    double padding_px = drum_radius_ * DRUM_PADDING_PERCENT;
+    double padded_radius = drum_radius_ - padding_px * 2;
+    sf::CircleShape* circle = new sf::CircleShape{ static_cast<float>(
+        padded_radius) };
     auto colour = DRUM_COLOURS[GetNoteUniqueIndex(note) % NUM_DRUM_COLOURS];
     circle->setFillColor(colour);
     circle->setOutlineColor(OUTLINE_COLOUR);
@@ -96,8 +98,9 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     // Create GameObject
     // Height is derived by note duration and speed (note should move its
     // entire height over its duration).
-    auto y_pos = (-d / 2.0) - song_note_y_offset_;
-    auto song_note = new GameObject{ circle, x + padding_px, y_pos, d, d};
+    auto y_pos = -padded_radius * 2.0f;
+    auto song_note = new GameObject{ circle, x + padding_px, y_pos
+        , padded_radius, padded_radius};
 
     // Add components
     song_note->SetComponent(new SongNoteComponent{});
@@ -113,21 +116,21 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
 GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     // Create underlying shape
     double x = GetXPosition(note);
-    double y = Config::GetInstance().GetScreenHeight() - DRUM_HEIGHT -
+    double y = Config::GetInstance().GetScreenHeight() - (drum_radius_ * 2.0f) -
         (Config::GetInstance().GetScreenHeight() * INSTRUMENT_HOVER_PERCENTAGE);
 
-    double padding_px = note_width_ * DRUM_PADDING_PERCENT;
-    double max_width = note_width_ - padding_px * 2;
-    float d = static_cast<float>(std::min(max_width
-        , static_cast<double>(DRUM_HEIGHT)));
-    sf::CircleShape* circle = new sf::CircleShape{ d / 2.0f };
+    double padding_px = drum_radius_ * DRUM_PADDING_PERCENT;
+    double padded_radius = drum_radius_ - padding_px * 2;
+    sf::CircleShape* circle = new sf::CircleShape{ static_cast<float>(
+        padded_radius) };
     circle->setFillColor(INSTRUMENT_FILL_COLOUR);
     circle->setOutlineColor(DRUM_COLOURS[GetNoteUniqueIndex(note) %
         NUM_DRUM_COLOURS]);
     circle->setOutlineThickness(INSTRUMENT_OUTLINE_THICKNESS);
 
     // Create GameObject
-    auto ins_note = new GameObject{circle, x + padding_px, y, d, d};
+    auto ins_note = new GameObject{circle, x + padding_px, y, padded_radius
+        , padded_radius};
 
     // Get key binding
     sf::Keyboard::Key key;
@@ -168,7 +171,7 @@ int DrumGameObjectFactory::GetNoteUniqueIndex(int note) {
 }
 
 double DrumGameObjectFactory::GetXPosition(int note) {
-    return x_pos_offset_ + GetNoteUniqueIndex(note) * note_width_;
+    return x_pos_offset_ + GetNoteUniqueIndex(note) * (drum_radius_ * 2);
 }
 
 bool DrumGameObjectFactory::Init() {
