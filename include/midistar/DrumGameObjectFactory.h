@@ -73,17 +73,16 @@ class DrumGameObjectFactory : public GameObjectFactory {
 
  private:
     static const sf::Color BACKGROUND_COLOUR;  //!< Background colour
-    static const int DRUM_HEIGHT = 150;     //!< Drum height
     static constexpr float DRUM_PADDING_PERCENT = 0.1;  //!< Padding percentage
+    static constexpr double MAX_DRUM_RADIUS_PERCENT = 0.1;  //!< Max radius of
+          //!< drum notes and instruments as a percentage of the size of the
+                                                                     //!< screen
     static const sf::Color INSTRUMENT_FILL_COLOUR;  //!< Drum fill colour
     static constexpr float INSTRUMENT_HOVER_PERCENTAGE = 0.1f;  //!< The
              //!< percentage of the screen height that instruments will hover
     static constexpr float INSTRUMENT_OUTLINE_THICKNESS = -10.0f;  //!< Outline
                                                         //!< thickness of drums
-    static const int MAX_DRUM_WIDTH = 200;  //!< Max drum width
     static const int NUM_DRUM_COLOURS = 6;  //!< Num drum colours
-    static const int MAX_NOTE_HEIGHT = 200;  //!< Max note height
-    static const int NOTE_HEIGHT_MULTIPLIER = 200;  //!< Determines note height
     static constexpr float NOTE_OUTLINE_THICKNESS = -3.0f;  //!< Outline
                                                     //!< thickness of notes
     static const int NUM_MIDI_KEYS = 128;  //!< Maximum MIDI key
@@ -101,9 +100,7 @@ class DrumGameObjectFactory : public GameObjectFactory {
     double GetXPosition(int note);  //!< Gets the X position of a song
                                                          //!< note / instrument
 
-    double note_width_;  //!< Holds the width of song notes
-    double song_note_y_offset_;  //!< Offset used to spawn song notes above the
-                                                                 //!< screen
+    double drum_radius_;  //!< Holds the radius of drum notes / instruments
     std::vector<int> song_notes_;  //!< Unique MIDI notes in the song
     double x_pos_offset_;  //!< Defines offset for X coord for note and
                                                                 //!< instruments
