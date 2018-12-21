@@ -35,12 +35,22 @@ InstrumentInputHandlerComponent::InstrumentInputHandlerComponent(
         , ctrl_{ctrl}
         , key_{key}
         , key_down_{false}
+        , note_played_{false}
         , set_active_{false}
-        , shift_{shift} {
+        , shift_{shift}
+        , was_active_{false} {
+}
+
+bool InstrumentInputHandlerComponent::GetNotePlayed() {
+    return note_played_;
 }
 
 void InstrumentInputHandlerComponent::SetActive(bool active) {
     set_active_ = active;
+}
+
+void InstrumentInputHandlerComponent::SetNotePlayed(bool note_played) {
+    note_played_ = note_played;
 }
 
 void InstrumentInputHandlerComponent::Update(Game* g, GameObject* o, int) {
@@ -59,7 +69,7 @@ void InstrumentInputHandlerComponent::Update(Game* g, GameObject* o, int) {
         }
 
         // Determine if the key is up or down and the required modifiers are
-        // pressed
+        // pressed.
         key_down_ = e.type == sf::Event::KeyPressed
             && ctrl_ == e.key.control
             && shift_ == e.key.shift;
@@ -74,10 +84,16 @@ void InstrumentInputHandlerComponent::Update(Game* g, GameObject* o, int) {
         }
     }
 
+    // If we've already played a note with this key press, disable collision (so
+    // the player will have to play the instrument again).
+    if (note_played_) {
+        o->DeleteComponent(Component::COLLIDABLE);
+    }
+
     // If this instrument is activated...
     if (key_down_ || set_active_) {
         // Set the GraphicsComponent and send a note on event
-        if (!o->HasComponent(Component::COLLIDABLE)) {
+        if (!was_active_) {
             o->SetComponent(new CollidableComponent{});
             o->SetComponent(new InvertColourComponent{static_cast<char>(0xa0)});
             o->SetComponent(new MidiNoteComponent{
@@ -85,9 +101,11 @@ void InstrumentInputHandlerComponent::Update(Game* g, GameObject* o, int) {
                     , note->GetChannel()
                     , note->GetKey()
                     , note->GetVelocity()});
+            was_active_ = true;
        }
-    // If it's not activated but the CollidableComponent is set...
-    } else if (o->HasComponent(Component::COLLIDABLE)) {
+    // If it's not activated and the CollidableComponent is set... (just played
+    // a note).
+    } else if (was_active_) {
         // Remove it and send a note off event
         o->DeleteComponent(Component::COLLIDABLE);
         o->SetComponent(new InvertColourComponent{static_cast<char>(0xa0)});
@@ -96,6 +114,9 @@ void InstrumentInputHandlerComponent::Update(Game* g, GameObject* o, int) {
                 , note->GetChannel()
                 , note->GetKey()
                 , note->GetVelocity()});
+        // Add reset logic here.
+        note_played_ = false;
+        was_active_ = false;
     }
 }
 

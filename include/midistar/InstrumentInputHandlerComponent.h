@@ -49,12 +49,28 @@ class InstrumentInputHandlerComponent : public Component {
             , bool shift);
 
      /**
+      * Indicates if a note has been played by this instrument this tick.
+      *
+      * \returns bool True indicates a note has been played. False indicates
+      * otherwise.
+      */
+     bool GetNotePlayed();
+
+     /**
       * Allows other components to activate instrument.
       *
       * \param active True activates instrument. False leaves instrument
       * unchanged.
       */
      void SetActive(bool active);
+
+     /**
+      * Indicates if a note has been played by this instrument this tick.
+      *
+      * \param note_played True indicates a note has been played. False
+      * indicates otherwise.
+      */
+     void SetNotePlayed(bool note_played);
 
      /**
       * \copydoc Component::Update()
@@ -67,10 +83,13 @@ class InstrumentInputHandlerComponent : public Component {
                                   //!< pressed in conjunction with key binding
      const sf::Keyboard::Key key_;  //!< The key bound to this instrument
      bool key_down_;  //!< Determines if the instrument is currently activated
+     bool note_played_;  //!< Indicates if a note has been played within the
+                                                                  //!< last tick
      bool set_active_;  //!< Determines if the instrument has been activated
                                                                 //!< externally
      const bool shift_;  //!< Determines if the 'shift' modifier has to be
                                   //!< pressed in conjunction with key binding
+     bool was_active_;  //!< Determines if the instrument was active last tick
 };
 
 }  // End namespace midistar
