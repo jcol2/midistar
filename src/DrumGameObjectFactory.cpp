@@ -83,7 +83,7 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
         , int chan
         , int note
         , int vel
-        , double duration) {
+        , double) {
     // Create underlying shape
     double x = GetXPosition(note);
     double padding_px = drum_radius_ * DRUM_PADDING_PERCENT;
@@ -100,7 +100,7 @@ GameObject* DrumGameObjectFactory::CreateSongNote(
     // entire height over its duration).
     auto y_pos = -padded_radius * 2.0f;
     auto song_note = new GameObject{ circle, x + padding_px, y_pos
-        , padded_radius, padded_radius};
+        , padded_radius * 2.0f, padded_radius * 2.0f};
 
     // Add components
     song_note->SetComponent(new SongNoteComponent{});
@@ -129,8 +129,8 @@ GameObject* DrumGameObjectFactory::CreateInstrumentNote(int note) {
     circle->setOutlineThickness(INSTRUMENT_OUTLINE_THICKNESS);
 
     // Create GameObject
-    auto ins_note = new GameObject{circle, x + padding_px, y, padded_radius
-        , padded_radius};
+    auto ins_note = new GameObject{circle, x + padding_px, y
+        , padded_radius * 2.0f, padded_radius * 2.0f};
 
     // Get key binding
     sf::Keyboard::Key key;

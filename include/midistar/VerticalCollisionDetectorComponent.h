@@ -34,12 +34,12 @@ namespace midistar {
 class VerticalCollisionDetectorComponent : public Component {
  public:
      /**
-      * Constructor. 
+      * Constructor.
       */
      VerticalCollisionDetectorComponent();
 
      /**
-      * Finds GameObjects that are colliding with the owner. 
+      * Finds GameObjects that are colliding with the owner.
       *
       * \return Colliding GameObjects.
       */
