@@ -21,6 +21,7 @@
 #include <algorithm>
 
 #include "midistar/Config.h"
+#include "midistar/InstrumentInputHandlerComponent.h"
 #include "midistar/MidiNoteComponent.h"
 #include "midistar/NoteInfoComponent.h"
 #include "midistar/ResizeComponent.h"
@@ -74,6 +75,17 @@ bool DrumSongNoteCollisionHandlerComponent::HandleCollision(
     // Check if the top or bottom edge of the note is inside the instrument
     if ((y > inst_y && y < inst_y + inst_h)
         || (y + height > inst_y && y + height < inst_y + inst_h)) {
+        // Check that the instrument has not already played a note this tick
+        auto inst_input_handler = collider->GetComponent<
+            InstrumentInputHandlerComponent>(
+                Component::INSTRUMENT_INPUT_HANDLER);
+        if (inst_input_handler) {
+            if (inst_input_handler->GetNotePlayed()) {
+                return false;
+            }
+            inst_input_handler->SetNotePlayed(true);
+        }
+
         // Make the note invisible (it has been played)
         o->SetComponent(new ResizeComponent{0, 0});
         o->DeleteComponent(GetType());
