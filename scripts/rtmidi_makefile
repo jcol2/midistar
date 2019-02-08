@@ -1,23 +1,22 @@
-#define macros
 EXECUTABLE_NAME = rtmidi.lib
 
 rtmidi.obj : RtMidi.cpp
  @echo.
- @echo Compiling... 
- cl /c /EHsc /DDEBUG /MDd RtMidi.cpp
+ @echo Compiling...
+ cl /c /EHsc /DDEBUG /D__WINDOWS_MM__ /MDd RtMidi.cpp
  @echo Compiling done!
 
 $(EXECUTABLE_NAME) : rtmidi.obj
- @echo.  
+ @echo.
  @echo Linking...
- lib /out:$(EXECUTABLE_NAME) rtmidi.obj
- @echo Linking done! 
+ lib /out:$(EXECUTABLE_NAME) rtmidi.obj winmm.lib
+ @echo Linking done!
 
-cleanup:  
-	@echo.  
-	@echo Cleanup...  
-	del rtmidi.obj  
-	del $(EXECUTABLE_NAME)  
-	@echo Cleanup done! 
+cleanup:
+	@echo.
+	@echo Cleanup...
+	del rtmidi.obj
+	del $(EXECUTABLE_NAME)
+	@echo Cleanup done!
 
 all: cleanup $(EXECUTABLE_NAME)
