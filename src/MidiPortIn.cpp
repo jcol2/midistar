@@ -30,7 +30,7 @@ bool MidiPortIn::Init() {
     midi_in_ = new RtMidiIn();
 
     try {
-        midi_in_->openPort(0, "Midistar Input");
+        midi_in_->openPort(0, "midistar Input");
     } catch (...) {
         std::cerr << "Warning: error opening MIDI input port. MIDI input "
             << "disabled.\n";
