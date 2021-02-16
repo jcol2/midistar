@@ -16,16 +16,22 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <unistd.h>
+
 #include "midistar/MidiOut.h"
 
 #include "midistar/Config.h"
+
+#include <smartpiano/serial/SerialClientImplementation.hpp>
+#include <serial/serial.h>
 
 namespace midistar {
 
 MidiOut::MidiOut()
         : a_driver_{nullptr}
         , settings_{nullptr}
-        , synth_{nullptr} {
+        , synth_{nullptr}
+        , smart_piano_{nullptr} {
 }
 
 MidiOut::~MidiOut() {
@@ -39,6 +45,10 @@ MidiOut::~MidiOut() {
 
     if (settings_) {
         delete_fluid_settings(settings_);
+    }
+
+    if (smart_piano_) {
+        //delete smart_piano_;
     }
 }
 
@@ -77,15 +87,67 @@ bool MidiOut::Init() {
         }
     }
 
+    unsigned long baud = 115200;
+    auto serial = new serial::Serial("/dev/ttyACM0", baud, serial::Timeout::simpleTimeout(1000));
+
+    std::cout << "Initializing...\n";
+    auto serial_client = new smartpianoclient::SerialClientImplementation{ serial };
+    if (serial_client->Init())
+    {
+        std::cerr << "Error initializing serial client!\n";
+        throw 1;
+    }
+
+    smart_piano_ = new smartpianoclient::SmartPianoClientImplementation { serial_client };
+    if (smart_piano_->Init())
+    {
+        std::cerr << "Error initializing smartpiano client!\n";
+        throw 2;
+    }
+    std::cout << "Waiting for smartpianoclient...\n";
+    sleep(10);
+
     return synth_ && a_driver_ && s_font_id_ != -1;
 }
 
 void MidiOut::SendNoteOff(int note, int chan) {
     fluid_synth_noteoff(synth_, chan, note);
+
+    if (smart_piano_) {
+        /*
+        uint8_t buf[256];
+        while (smart_piano_->GetMessage(buf, 256))
+        {
+            std::cout << "Message: " << buf << "\n";
+        }
+        */
+
+        smart_piano_->ClearLedColor(note);
+        smart_piano_->UpdateLeds();
+    }
 }
 
 void MidiOut::SendNoteOn(int note, int chan, int velocity) {
     fluid_synth_noteon(synth_, chan, note, velocity);
+
+    if (smart_piano_) {
+        /*
+        uint8_t buf[256];
+        while (smart_piano_->GetMessage(buf, 256))
+        {
+            std::cout << "Message: " << buf << "\n";
+        }
+        */
+
+        uint8_t r, g, b, w;
+        r = 0;
+        g = 0;
+        b = 0xff;
+        w = 0;
+
+        smart_piano_->SetLedColor(note, r, g, b, w);
+        smart_piano_->UpdateLeds();
+    }
 }
 
 }  // End namespace midistar

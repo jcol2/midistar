@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Set LD_LIBRARY_PATH to find shared libraries
-export LD_LIBRARY_PATH="lib/$1"
+export LD_LIBRARY_PATH="lib/$1:/home/jez/sandbox/serial/build/devel/lib/:/home/jez/projects/smartpianoclient-cpp"

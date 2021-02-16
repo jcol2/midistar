@@ -21,6 +21,8 @@
 
 #include <fluidsynth.h>
 
+#include "smartpiano/SmartPianoClientImplementation.hpp"
+
 namespace midistar {
 
 /**
@@ -67,6 +69,8 @@ class MidiOut {
     int s_font_id_;  //!< Stores SoundFont handle
     fluid_settings_t* settings_;  //!< Stores fluidsynth settings
     fluid_synth_t* synth_;  //!< Stores fluidsynth synth instance
+
+    smartpianoclient::SmartPianoClientImplementation* smart_piano_;
 };
 
 }  // End namespace midistar

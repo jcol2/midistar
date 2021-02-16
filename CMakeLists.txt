@@ -3,6 +3,8 @@ project (midistar)
 
 # Find external libraries
 include_directories(include)
+include_directories(/home/jez/projects/smartpianoclient-cpp/include)
+include_directories(/home/jez/sandbox/serial/include/)
 
 # Set headers
 set(HEADERS
@@ -203,6 +205,8 @@ else()
 
     # Specify link directory by build type
     link_directories(${CMAKE_SOURCE_DIR}/lib/${build_type})
+    link_directories(/home/jez/projects/smartpianoclient-cpp)
+    link_directories(/home/jez/sandbox/serial/build/devel/lib)
 
     # Change binary output dir
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${build_type})
@@ -299,7 +303,7 @@ else() # Linux/OSX
     if(${build_type} STREQUAL "release")
         set(UNIX_LIBS midifile rtmidi sfml-graphics sfml-system sfml-window)
     else()
-        set(UNIX_LIBS midifile rtmidi sfml-graphics-d sfml-system-d sfml-window-d)
+        set(UNIX_LIBS midifile rtmidi sfml-graphics-d sfml-system-d sfml-window-d smartpianoclient serial)
     endif()
 
     # Add stdc++ filesystem flag
