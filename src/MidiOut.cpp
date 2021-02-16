@@ -122,7 +122,9 @@ void MidiOut::SendNoteOff(int note, int chan) {
         }
         */
 
-        smart_piano_->ClearLedColor(note);
+        auto index = (note - 30) * 2;
+        smart_piano_->ClearLedColor(index);
+        smart_piano_->ClearLedColor(index + 1);
         smart_piano_->UpdateLeds();
     }
 }
@@ -138,14 +140,15 @@ void MidiOut::SendNoteOn(int note, int chan, int velocity) {
             std::cout << "Message: " << buf << "\n";
         }
         */
-
+        auto index = (note - 30) * 2;
         uint8_t r, g, b, w;
         r = 0;
-        g = 0;
-        b = 0xff;
+        g = index < 60 ? 0x1f : 0x0;
+        b = index >= 60 ? 0x1f : 0x0;
         w = 0;
-
-        smart_piano_->SetLedColor(note, r, g, b, w);
+        std::cout << "Setting " << note << " " << r << g << b << w << "\n";
+        smart_piano_->SetLedColor(index, r, g, b, w);
+        smart_piano_->SetLedColor(index + 1, r, g, b, w);
         smart_piano_->UpdateLeds();
     }
 }
