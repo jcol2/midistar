@@ -37,8 +37,8 @@ void MidiOutputComponent::TurnMidiNoteOn(int chan, int note, int vel) {
     midi_out_->SendNoteOn(note, chan, vel);
 }
 
-void MidiOutputComponent::Update(Game*, GameObject*, int) {
-    // Do nothing
+void MidiOutputComponent::Update(Game*, GameObject*, int delta) {
+    midi_out_->Update(delta);
 }
 
 }   // End namespace midistar

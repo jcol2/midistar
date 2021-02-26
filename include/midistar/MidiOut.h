@@ -64,6 +64,8 @@ class MidiOut {
      */
     void SendNoteOn(int note, int chan, int velocity);
 
+    void Update(int delta);
+
  private:
     fluid_audio_driver_t* a_driver_;  //!< Stores fluidsynth audio driver
     int s_font_id_;  //!< Stores SoundFont handle
@@ -71,6 +73,8 @@ class MidiOut {
     fluid_synth_t* synth_;  //!< Stores fluidsynth synth instance
 
     smartpianoclient::SmartPianoClientImplementation* smart_piano_;
+    int time_;
+    bool update_required_;
 };
 
 }  // End namespace midistar

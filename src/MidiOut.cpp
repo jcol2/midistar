@@ -31,7 +31,9 @@ MidiOut::MidiOut()
         : a_driver_{nullptr}
         , settings_{nullptr}
         , synth_{nullptr}
-        , smart_piano_{nullptr} {
+        , smart_piano_{nullptr}
+        , time_{0}
+        , update_required_{false} {
 }
 
 MidiOut::~MidiOut() {
@@ -125,7 +127,7 @@ void MidiOut::SendNoteOff(int note, int chan) {
         auto index = (note - 30) * 2;
         smart_piano_->ClearLedColor(index);
         smart_piano_->ClearLedColor(index + 1);
-        smart_piano_->UpdateLeds();
+        update_required_ = true;
     }
 }
 
@@ -148,8 +150,17 @@ void MidiOut::SendNoteOn(int note, int chan, int velocity) {
         w = 0;
         std::cout << "Setting " << note << " " << r << g << b << w << "\n";
         smart_piano_->SetLedColor(index, r, g, b, w);
-        smart_piano_->SetLedColor(index + 1, r, g, b, w);
+        smart_piano_->SetLedColor(index + 1, r, g, b, w);    
+        update_required_ = true;    
+    }
+}
+
+void MidiOut::Update(int delta) {
+    time_ += delta;
+    if (time_ % 10 == 0 && update_required_) {
         smart_piano_->UpdateLeds();
+        update_required_ = false;
+        time_ = 0;
     }
 }
 
